@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+	
+<struts>
+
+    <constant name="struts.action.excludePattern" value="/static/.*?" />
+    
+    <package name="admin"  namespace="/" extends="struts-default">
+        <interceptors>
+       <!--  1.注册拦截器 -->
+           <interceptor name="loginInterceptor" class="com.atcgt.intercepter.LoginInterceptor"></interceptor>
+     <!--      2.注册拦截器栈  -->
+           <interceptor-stack name="MyStack">
+              <interceptor-ref name="loginInterceptor">
+                  <param name="excludeMethods">login,register</param>
+              </interceptor-ref>
+              <interceptor-ref name="defaultStack"></interceptor-ref>
+           </interceptor-stack>  
+      </interceptors>
+      <!-- 默认包中的拦截器 -->
+      <default-interceptor-ref name="MyStack"></default-interceptor-ref>
+       
+      <global-results>
+          <result  name="toLogin" type="redirect" >/login.jsp</result>
+      </global-results>
+       
+       <action name="computerAction"  class="com.atcgt.action.ComputerAction"  method="computer" >
+           <result name="computer">/computersource.jsp</result>
+      </action>
+      <action name="registerAction"  class="com.atcgt.action.RegistAction"  method="register" >
+           <result name="save">/login.jsp</result>
+      </action>
+      
+      <action name="questionBankAction_*"  class="com.atcgt.action.QuestionBankAction"  method="{1}">
+           <result name="choose">/work.jsp</result>
+           <result name="score">/score.jsp</result>
+           <result name="list">/shitiguangli.jsp</result>
+           <result name="save" type="redirect">/questionBankAction_list</result>
+      </action>
+    
+       <action name="loginAction"  class="com.atcgt.action.LoginAction"  method="login" >
+           <result name="success" type="redirect">/spocpage.jsp</result>
+           <result name="error">/login.jsp</result>
+           <result name="teah">/Teacher.jsp</result>
+      </action>
+    
+  </package>
+ 
+</struts>
